@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trilhaapp/pages/login_page.dart';
 
 import 'pages/home_page.dart';
 
@@ -11,11 +12,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.green,
-        textTheme: GoogleFonts.pacificoTextTheme(
+        textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
         ),
       ),
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }
