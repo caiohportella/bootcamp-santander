@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:trilhaapp/service/random_number_generator_service.dart';
+import 'package:trilhaapp/pages/register_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,73 +9,48 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int randNumber = 0;
-  int clickCount = 0;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Meu App')),
-      body: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              color: Colors.amber,
-              child: Text(
-                "Foi clicado $clickCount vezes",
-              ),
-            ),
-            Container(
-              color: Colors.cyan,
-              child: Text(
-                "O número gerado foi: $randNumber",
-              ),
-            ),
-            Container(
-              color: Colors.green,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      color: Colors.red,
-                      child: const Text("Nome:"),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      color: Colors.blue,
-                      child: const Text("Caio Portella"),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      color: Colors.green,
-                      child: const Text("30"),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Home Page"),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            clickCount++;
-            randNumber =
-                RandomNumberGeneratorService.generateRandomNumber(1000);
-          });
-        },
-        child: const Icon(Icons.add),
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text("Drawer Header"),
+              ),
+              ListTile(
+                title: const Text("Your account"),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterPage(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text("Item 2"),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text("Item 3"),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

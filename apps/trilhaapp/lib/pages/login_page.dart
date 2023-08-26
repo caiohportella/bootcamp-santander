@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home_page.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -133,8 +135,19 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     child: TextButton(
                       onPressed: () {
-                        print("Email: $email");
-                        print("Password: $password");
+                        if (email.trim() == "caio@gmail.com" &&
+                            password.trim() == "exorcise") {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Login ou senha inválidos"),
+                            ),
+                          );
+                        }
                       },
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all(
