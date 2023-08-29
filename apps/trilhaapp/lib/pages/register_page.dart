@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+  final String text;
+  final List<String> data;
+  const RegisterPage({Key? key, required this.text, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Scaffold(body: Center(child: Text("Register Page"))),
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(title: Text(text)),
+          body: Center(child: Text(data.length.toString()))),
     );
   }
 }
