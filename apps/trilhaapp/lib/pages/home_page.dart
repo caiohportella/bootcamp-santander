@@ -37,10 +37,8 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const RegisterPage(
-                          text: "Your account",
-                          data: ["Nome", "Email", "Senha"]),
-                    ),
+                      builder: (context) => const RegisterPage(),
+                    )
                   );
                 },
               ),
