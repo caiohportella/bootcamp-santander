@@ -12,6 +12,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
   var nameController = TextEditingController(text: "");
   var birthDateController = TextEditingController(text: "");
   var levelRepository = LevelRepository();
@@ -46,16 +47,17 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               const TextLabel(text: "Nome"),
               const SizedBox(height: 20),
-              TextField(
+              TextFormField(
                 controller: nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Nome',
                 ),
+                validator: (value) => value!.isEmpty ? 'Nome inválido' : null,
               ),
               const TextLabel(text: "Data de nascimento"),
               const SizedBox(height: 20),
-              TextField(
+              TextFormField(
                 readOnly: true,
                 controller: birthDateController,
                 onTap: () async {
@@ -74,6 +76,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   border: OutlineInputBorder(),
                   labelText: 'Data de nascimento',
                 ),
+                validator: (value) =>
+                    value!.isEmpty ? 'Data de nascimento inválida' : null,
               ),
               const TextLabel(text: "Nível de experiência"),
               Column(
@@ -110,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           }))
                       .toList()),
               const TextLabel(text: "Tempo de experiência"),
-              DropdownButton(
+              DropdownButtonFormField(
                   isExpanded: true,
                   value: experienceTime,
                   items: experienceYears
@@ -123,7 +127,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     setState(() {
                       experienceTime = selectedExperienceTime.toString();
                     });
-                  }),
+                  },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Tempo de experiência',
+                  ),
+                  validator: (value) => (value as String?)?.isEmpty ?? true
+                      ? 'Tempo de experiência inválido'
+                      : null),
               TextLabel(
                   text:
                       "Pretenção salarial: R\$${chosenSalary.round().toString()}"),
@@ -132,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 min: 1320,
                 max: 10000,
                 divisions: 500,
-                label: "R\$ 0,00",
+                label: "R\$${chosenSalary.round()}",
                 onChanged: (double value) {
                   setState(() {
                     chosenSalary = value;
@@ -141,9 +152,19 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               TextButton(
                 onPressed: () => {
-                  // Navigator.pop(context, nameController.text),
-                  debugPrint(
-                      "Nome: ${nameController.text} e Data de nascimento: ${storedBirthDate?.day}/${storedBirthDate?.month}/${storedBirthDate?.year}"),
+                  if (_formKey.currentState!.validate())
+                  {
+                      debugPrint(
+                        "Nome: ${nameController.text};\n"
+                        "Data de nascimento: ${storedBirthDate?.day}/${storedBirthDate?.month}/${storedBirthDate?.year};\n"
+                        "Nível de experiência: ${selectedLevel.toString()};\n"
+                        "Linguagens preferidas: ${selectedLanguage.toString()};\n"
+                        "Tempo de experiência: ${experienceTime.toString()};\n"
+                        "Pretenção salarial: R\$${chosenSalary.round().toString()};\n"
+                      ),
+                  } else {
+                    debugPrint("Formulário inválido")
+                  },
                 },
                 child: const Text("Salvar"),
               ),
