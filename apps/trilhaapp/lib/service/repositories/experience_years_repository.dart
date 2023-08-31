@@ -7,4 +7,8 @@ class ExperienceYearsRepository {
       "Mais de 5 anos"
     ];
   }
+
+  String returnFirstExperienceYear() {
+    return returnExperienceYears().first;
+  }
 }

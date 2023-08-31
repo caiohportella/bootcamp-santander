@@ -21,7 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   var languages = [];
   var selectedLanguage = <String>[];
   double chosenSalary = 1320;
-  int experienceTime = 0;
+  String experienceTime = "";
   var experienceYearsRepository = ExperienceYearsRepository();
   var experienceYears = [];
   DateTime? storedBirthDate;
@@ -31,6 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
     levels = levelRepository.returnLevels();
     languages = languageRepository.returnLanguages();
     experienceYears = experienceYearsRepository.returnExperienceYears();
+    experienceTime = experienceYearsRepository.returnFirstExperienceYear();
     super.initState();
   }
 
@@ -111,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const TextLabel(text: "Tempo de experiência"),
               DropdownButton(
                   isExpanded: true,
-                  value: experienceYears.first,
+                  value: experienceTime,
                   items: experienceYears
                       .map((experienceYear) => DropdownMenuItem(
                             value: experienceYear,
@@ -120,10 +121,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       .toList(),
                   onChanged: (selectedExperienceTime) {
                     setState(() {
-                      experienceTime = selectedExperienceTime as int;
+                      experienceTime = selectedExperienceTime.toString();
                     });
                   }),
-              TextLabel(text: "Pretenção salarial: R\$${chosenSalary.round().toString()}"),
+              TextLabel(
+                  text:
+                      "Pretenção salarial: R\$${chosenSalary.round().toString()}"),
               Slider(
                 value: chosenSalary,
                 min: 1320,
