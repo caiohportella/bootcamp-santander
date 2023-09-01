@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:trilhaapp/pages/login_page.dart';
 import 'package:trilhaapp/pages/register_page.dart';
+import 'package:trilhaapp/service/image_picker_service.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
+
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  ImagePickerService imagePickerService = const ImagePickerService();
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +30,12 @@ class CustomDrawer extends StatelessWidget {
                         ListTile(
                           leading: const Icon(Icons.camera_alt_rounded),
                           title: const Text('Tirar foto'),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
+                          onTap: imagePickerService.getImageFromCamera,
                         ),
                         ListTile(
                           leading: const Icon(Icons.photo_camera_back_rounded),
                           title: const Text('Escolher da galeria'),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
+                          onTap: imagePickerService.getImageFromGallery,
                         ),
                       ],
                     );

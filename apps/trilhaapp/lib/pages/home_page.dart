@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text("Home Page"),
         ),
-        drawer: const CustomDrawer(),
+        drawer: CustomDrawer(),
         body: Column(
           children: [
             Expanded(
