@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trilhaapp/pages/home_page.dart';
 import 'package:trilhaapp/service/repositories/experience_years_repository.dart';
 import 'package:trilhaapp/service/repositories/level_repository.dart';
 import 'package:trilhaapp/service/repositories/languages_repository.dart';
@@ -40,7 +41,15 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text("Account")),
+        appBar: AppBar(
+          title: const Text("Account"),
+          leading: BackButton(
+            onPressed: () => {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const HomePage()))
+            },
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(
@@ -153,18 +162,16 @@ class _RegisterPageState extends State<RegisterPage> {
               TextButton(
                 onPressed: () => {
                   if (_formKey.currentState!.validate())
-                  {
-                      debugPrint(
-                        "Nome: ${nameController.text};\n"
-                        "Data de nascimento: ${storedBirthDate?.day}/${storedBirthDate?.month}/${storedBirthDate?.year};\n"
-                        "Nível de experiência: ${selectedLevel.toString()};\n"
-                        "Linguagens preferidas: ${selectedLanguage.toString()};\n"
-                        "Tempo de experiência: ${experienceTime.toString()};\n"
-                        "Pretenção salarial: R\$${chosenSalary.round().toString()};\n"
-                      ),
-                  } else {
-                    debugPrint("Formulário inválido")
-                  },
+                    {
+                      debugPrint("Nome: ${nameController.text};\n"
+                          "Data de nascimento: ${storedBirthDate?.day}/${storedBirthDate?.month}/${storedBirthDate?.year};\n"
+                          "Nível de experiência: ${selectedLevel.toString()};\n"
+                          "Linguagens preferidas: ${selectedLanguage.toString()};\n"
+                          "Tempo de experiência: ${experienceTime.toString()};\n"
+                          "Pretenção salarial: R\$${chosenSalary.round().toString()};\n"),
+                    }
+                  else
+                    {debugPrint("Formulário inválido")},
                 },
                 child: const Text("Salvar"),
               ),
