@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:trilhaapp/pages/login_page.dart';
+=======
+>>>>>>> c70ee7344e1a465e05b7e5607f308db2d74d9aa3
 import 'package:trilhaapp/pages/register_page.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -15,11 +18,16 @@ class CustomDrawer extends StatelessWidget {
               showModalBottomSheet(
                   context: context,
                   shape: RoundedRectangleBorder(
+<<<<<<< HEAD
                       borderRadius: BorderRadius.circular(10.0)),
+=======
+                    borderRadius: BorderRadius.circular(10.0)),
+>>>>>>> c70ee7344e1a465e05b7e5607f308db2d74d9aa3
                   builder: (BuildContext bc) {
                     return Wrap(
                       children: <Widget>[
                         ListTile(
+<<<<<<< HEAD
                           leading: const Icon(Icons.camera_alt_rounded),
                           title: const Text('Tirar foto'),
                           onTap: () {
@@ -32,6 +40,15 @@ class CustomDrawer extends StatelessWidget {
                           onTap: () {
                             Navigator.pop(context);
                           },
+=======
+                            leading: const Icon(Icons.camera_alt_rounded),
+                            title: const Text('Tirar foto'),
+                            onTap: () => {}),
+                        ListTile(
+                          leading: const Icon(Icons.photo_camera_back_rounded),
+                          title: const Text('Escolher da galeria'),
+                          onTap: () => {},
+>>>>>>> c70ee7344e1a465e05b7e5607f308db2d74d9aa3
                         ),
                       ],
                     );
@@ -51,7 +68,11 @@ class CustomDrawer extends StatelessWidget {
               children: [
                 Icon(Icons.person),
                 SizedBox(width: 10),
+<<<<<<< HEAD
                 Text("Sua conta"),
+=======
+                Text("Your account"),
+>>>>>>> c70ee7344e1a465e05b7e5607f308db2d74d9aa3
               ],
             ),
             onTap: () {
@@ -65,12 +86,28 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             title: const Row(
               children: [
+<<<<<<< HEAD
+=======
+                Icon(Icons.settings),
+                SizedBox(width: 10),
+                Text("Configurações"),
+              ],
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Row(
+              children: [
+>>>>>>> c70ee7344e1a465e05b7e5607f308db2d74d9aa3
                 Icon(Icons.exit_to_app),
                 SizedBox(width: 10),
                 Text("Sair"),
               ],
             ),
             onTap: () {
+<<<<<<< HEAD
               showDialog(
                   context: context,
                   builder: (BuildContext bc) {
@@ -99,6 +136,9 @@ class CustomDrawer extends StatelessWidget {
                       ],
                     );
                   });
+=======
+              Navigator.pop(context);
+>>>>>>> c70ee7344e1a465e05b7e5607f308db2d74d9aa3
             },
           ),
         ],
