@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trilhaapp/pages/pageView/card_page.dart';
-import 'package:trilhaapp/pages/pageView/page2.dart';
-import 'package:trilhaapp/pages/pageView/page3.dart';
+import 'package:trilhaapp/pages/pageView/image_assets.dart';
+import 'package:trilhaapp/pages/pageView/list_view.dart';
+import 'package:trilhaapp/pages/pageView/list_view_horizontal_page.dart';
 import 'package:trilhaapp/shared/widgets/custom_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text("Home Page"),
         ),
-        drawer: CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: Column(
           children: [
             Expanded(
@@ -35,12 +36,14 @@ class _HomePageState extends State<HomePage> {
                 },
                 children: const [
                   CardPage(),
-                  PageTwo(),
-                  PageThree(),
+                  ImageAssetsPage(),
+                  ListViewPage(),
+                  ListViewH(),
                 ],
               ),
             ),
             BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
                 onTap: (value) => pageController.jumpToPage(value),
                 currentIndex: pageIndex,
                 items: const [
@@ -56,6 +59,10 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(Icons.person),
                     label: "Profile",
                   ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.settings),
+                    label: "Settings",
+                  ),  
                 ])
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trilhaapp/pages/login_page.dart';
 import 'package:trilhaapp/pages/register_page.dart';
 import 'package:trilhaapp/service/image_picker_service.dart';
+// import 'package:trilhaapp/service/repositories/user_respository.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
