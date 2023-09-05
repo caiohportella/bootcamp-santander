@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class Task {
   final String _id = UniqueKey().toString();
-  String description = "";
-  bool isDone = false;
+  String taskDescription;
+  bool isTaskDone = false;
 
-  Task({required this.description, required this.isDone});
+  Task({required this.taskDescription, required this.isTaskDone});
 
-  String getId() => _id.toString();
-  String getDescription() => description;
-  void setDescription(String description) => this.description = description;
-  bool getIsDone() => isDone;
-  void setIsDone(bool isDone) => this.isDone = isDone;
+  String get id => _id;
+  String get description => taskDescription;
+  set description(String description) => taskDescription = description;
+  bool get isDone => isTaskDone;
+  set isDone(bool isDone) => isTaskDone = isDone;
 }
