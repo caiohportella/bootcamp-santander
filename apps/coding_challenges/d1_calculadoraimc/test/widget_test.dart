@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 // The widget you want to test
 class CounterWidget extends StatefulWidget {
+  const CounterWidget({super.key});
+
   @override
   _CounterWidgetState createState() => _CounterWidgetState();
 }
@@ -23,7 +25,7 @@ class _CounterWidgetState extends State<CounterWidget> {
         Text('Counter: $_counter'),
         ElevatedButton(
           onPressed: _incrementCounter,
-          child: Text('Increment'),
+          child: const Text('Increment'),
         ),
       ],
     );
@@ -32,7 +34,7 @@ class _CounterWidgetState extends State<CounterWidget> {
 
 void main() {
   testWidgets('CounterWidget increments counter', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: CounterWidget()));
+    await tester.pumpWidget(const MaterialApp(home: CounterWidget()));
 
     // Initial counter value
     expect(find.text('Counter: 0'), findsOneWidget);
