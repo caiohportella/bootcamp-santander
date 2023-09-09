@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:trilhaapp/pages/login_page.dart';
+import 'package:trilhaapp/pages/random_number.dart';
 import 'package:trilhaapp/pages/register_page.dart';
+import 'package:trilhaapp/pages/settings_page.dart';
 import 'package:trilhaapp/service/image_picker_service.dart';
-// import 'package:trilhaapp/service/repositories/user_respository.dart';
+import 'package:trilhaapp/service/repositories/user_respository.dart';
+import 'package:trilhaapp/model/card_detail.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -60,10 +63,42 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ],
             ),
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const RegisterPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            title: const Row(
+              children: [
+                Icon(Icons.numbers_outlined),
+                SizedBox(width: 10),
+                Text("Gerador de números aleatórios"),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RandomNumberPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            title: const Row(
+              children: [
+                Icon(Icons.settings),
+                SizedBox(width: 10),
+                Text("Configurações"),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsPage(),
                   ));
             },
           ),
