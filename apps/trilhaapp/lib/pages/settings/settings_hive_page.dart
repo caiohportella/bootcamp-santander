@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:trilhaapp/service/app_storage_service.dart';
+import 'package:trilhaapp/model/settings_model.dart';
+import 'package:trilhaapp/service/repositories/settings_repository.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class SettingsHivePage extends StatefulWidget {
+  const SettingsHivePage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<SettingsHivePage> createState() => _SettingsHivePageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
-  AppStorageService storage = AppStorageService();
+class _SettingsHivePageState extends State<SettingsHivePage> {
+  late SettingsRepository settingsRepository;
+  var settings = SettingsModel.empty();
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  String? username;
-  String? email;
-  bool isDarkMode = false;
-  bool hasPushNotificationOn = false;
-
   loadData() async {
-    usernameController.text = await storage.getSettingsUsername();
-    emailController.text = await storage.getEmail();
-    isDarkMode = await storage.getSettingsDarkMode();
-    hasPushNotificationOn = await storage.getSettingsPushNotification();
+    settingsRepository = await SettingsRepository.load();
+    settings = settingsRepository.getData();
+    usernameController.text = settings.username;
+    emailController.text = settings.email;
 
     setState(() {});
   }
@@ -38,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: AppBar(title: const Text("Configurações")),
+          appBar: AppBar(title: const Text("Configurações Hive")),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -66,26 +63,23 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SwitchListTile(
                   title: const Text("Notifications"),
-                  value: hasPushNotificationOn,
+                  value: settings.getNotifications,
                   onChanged: (value) => setState(() {
-                        hasPushNotificationOn = value;
+                        settings.getNotifications = value;
                       })),
               SwitchListTile(
                 title: const Text("Dark mode"),
-                value: isDarkMode,
+                value: settings.isDarkMode,
                 onChanged: (value) => setState(() {
-                  isDarkMode = value;
+                  settings.isDarkMode = value;
                 }),
               ),
               FloatingActionButton(
                   onPressed: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     try {
-                      await storage.setEmail(emailController.text);
-                      await storage
-                          .setSettingsUsername(usernameController.text);
-                      await storage.setSettingsDarkMode(isDarkMode);
-                      await storage
-                          .setSettingsPushNotification(hasPushNotificationOn);
+                      settings.settingsEmail = emailController.text;
+                      settings.settingsUsername = usernameController.text;
                     } catch (e) {
                       showDialog(
                         context: context,
@@ -100,11 +94,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       );
                     }
+                    settingsRepository.save(settings);
                     Navigator.pop(context);
 
                     setState(() {
-                      username = usernameController.text;
-                      email = emailController.text;
+                      settings.username = usernameController.text;
+                      settings.email = emailController.text;
                     });
                   },
                   child: const Icon(Icons.save_as_rounded))

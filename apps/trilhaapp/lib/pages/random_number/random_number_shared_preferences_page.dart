@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:trilhaapp/service/app_storage_service.dart';
 
-class RandomNumberPage extends StatefulWidget {
-  const RandomNumberPage({super.key});
+class RandomNumberSharedPreferencesPage extends StatefulWidget {
+  const RandomNumberSharedPreferencesPage({super.key});
 
   @override
-  State<RandomNumberPage> createState() => _RandomNumberPageState();
+  State<RandomNumberSharedPreferencesPage> createState() => _RandomNumberSharedPreferencesPageState();
 }
 
-class _RandomNumberPageState extends State<RandomNumberPage> {
+class _RandomNumberSharedPreferencesPageState extends State<RandomNumberSharedPreferencesPage> {
   int generatedNumber = 0;
   int clicks = 0;
 

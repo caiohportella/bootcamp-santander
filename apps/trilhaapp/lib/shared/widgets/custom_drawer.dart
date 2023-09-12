@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trilhaapp/pages/login_page.dart';
-import 'package:trilhaapp/pages/random_number.dart';
-import 'package:trilhaapp/pages/register_page.dart';
-import 'package:trilhaapp/pages/settings_page.dart';
+import 'package:trilhaapp/pages/random_number/random_number_hive_page.dart';
+import 'package:trilhaapp/pages/register_data/register_page_hive.dart';
+import 'package:trilhaapp/pages/settings/settings_hive_page.dart';
 import 'package:trilhaapp/service/image_picker_service.dart';
-import 'package:trilhaapp/service/repositories/user_respository.dart';
-import 'package:trilhaapp/model/card_detail.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -66,7 +64,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const RegisterPage(),
+                    builder: (context) => const RegisterHivePage(),
                   ));
             },
           ),
@@ -82,7 +80,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const RandomNumberPage(),
+                    builder: (context) => const RandomNumberHivePage(),
                   ));
             },
           ),
@@ -98,7 +96,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SettingsPage(),
+                    builder: (context) => const SettingsHivePage(),
                   ));
             },
           ),

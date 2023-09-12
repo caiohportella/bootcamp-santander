@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:trilhaapp/model/user_data_model.dart';
 import 'package:trilhaapp/pages/home_page.dart';
-import 'package:trilhaapp/service/app_storage_service.dart';
 import 'package:trilhaapp/service/repositories/experience_years_repository.dart';
 import 'package:trilhaapp/service/repositories/level_repository.dart';
 import 'package:trilhaapp/service/repositories/languages_repository.dart';
+import 'package:trilhaapp/service/repositories/user_data_repository.dart';
 import 'package:trilhaapp/shared/widgets/text_label.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -14,6 +15,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  late UserDataRepository userDataRepository;
+  var userData = UserDataModel.empty();
+
   final _formKey = GlobalKey<FormState>();
   var nameController = TextEditingController(text: "");
   var emailController = TextEditingController(text: "");
@@ -29,15 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
   String experienceTime = "";
   var experienceYearsRepository = ExperienceYearsRepository();
   var experienceYears = [];
-
-  AppStorageService appStorageService = AppStorageService();
-  // final String K_NAME = "name";
-  // final String K_EMAIL = "email";
-  // final String K_BIRTH_DATE = "birthDate";
-  // final String K_SELECTED_LEVEL = "selectedLevel";
-  // final String K_SELECTED_LANGUAGE = "selectedLanguage";
-  // final String K_EXPERIENCE_TIME = "experienceTime";
-  // final String K_CHOSEN_SALARY = "chosenSalary";
 
   String? validateEmail(String? value) {
     const pattern = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"
@@ -55,13 +50,17 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void loadData() async {
-    nameController.text = await appStorageService.getRegisterName();
-    emailController.text = await appStorageService.getEmail();
-    birthDateController.text = await appStorageService.getRegisterBirthDate();
-    selectedLevel = await appStorageService.getRegisterSelectedLevel();
-    selectedLanguage = await appStorageService.getRegisterSelectedLanguage();
-    experienceTime = await appStorageService.getRegisterExperienceTime();
-    chosenSalary = await appStorageService.getRegisterChosenSalary();
+    userDataRepository = await UserDataRepository.load();
+    userData = userDataRepository.getData();
+    nameController.text = userData.userDataUsername ?? "";
+    emailController.text = userData.userDataEmail ?? "";
+    birthDateController.text = userData.userDataDateOfBirth == null
+        ? ""
+        : userData.userDataDateOfBirth.toString();
+    selectedLevel = userData.userDataExperienceLevel ?? "";
+    selectedLanguage = userData.languages;
+    experienceTime = userData.userDataExperienceTime ?? "";
+    chosenSalary = userData.userDataSallary ?? 1320;
 
     setState(() {});
   }
@@ -144,8 +143,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       lastDate: DateTime.now());
                   if (date != null) {
                     birthDateController.text = date.toString();
-                    birthDate = DateTime.parse(birthDateController.text);
-                    birthDate = date;
+                    userData.userDataDateOfBirth =
+                        DateTime.parse(birthDateController.text);
+                    userData.userDataDateOfBirth = date;
                   }
                 },
                 decoration: const InputDecoration(
@@ -161,11 +161,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     .map((level) => RadioListTile(
                           title: Text(level.toString()),
                           value: level.toString(),
-                          selected: selectedLevel == level.toString(),
-                          groupValue: selectedLevel,
+                          selected: userData.userDataExperienceLevel ==
+                              level.toString(),
+                          groupValue: userData.userDataExperienceLevel,
                           onChanged: (value) {
                             setState(() {
-                              selectedLevel = value.toString();
+                              userData.userDataExperienceLevel =
+                                  value.toString();
                             });
                           },
                         ))
@@ -176,15 +178,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: languages
                       .map((language) => CheckboxListTile(
                           title: Text(language.toString()),
-                          value: selectedLanguage.contains(language),
+                          value: userData.languages.contains(language),
                           onChanged: (bool? value) {
                             if (value!) {
                               setState(() {
-                                selectedLanguage.add(language);
+                                userData.languages.add(language);
                               });
                             } else {
                               setState(() {
-                                selectedLanguage.remove(language);
+                                userData.languages.remove(language);
                               });
                             }
                           }))
@@ -192,9 +194,9 @@ class _RegisterPageState extends State<RegisterPage> {
               const TextLabel(text: "Tempo de experiência"),
               DropdownButtonFormField(
                   isExpanded: true,
-                  value: experienceTime == ""
+                  value: userData.userDataExperienceTime == ""
                       ? experienceYearsRepository.returnFirstExperienceYear()
-                      : experienceTime,
+                      : userData.userDataExperienceTime,
                   items: experienceYears
                       .map((experienceYear) => DropdownMenuItem(
                             value: experienceYear,
@@ -203,7 +205,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       .toList(),
                   onChanged: (selectedExperienceTime) {
                     setState(() {
-                      experienceTime = selectedExperienceTime.toString();
+                      userData.userDataExperienceTime =
+                          selectedExperienceTime.toString();
                     });
                   },
                   decoration: const InputDecoration(
@@ -214,43 +217,25 @@ class _RegisterPageState extends State<RegisterPage> {
                       : null),
               TextLabel(
                   text:
-                      "Pretenção salarial: R\$${chosenSalary.round().toString()}"),
+                      "Pretenção salarial: R\$${userData.userDataSallary?.round().toString()}"),
               Slider(
-                value: chosenSalary,
+                value: userData.userDataSallary ?? 1320,
                 min: 1320,
                 max: 10000,
                 divisions: 500,
-                label: "R\$${chosenSalary.round()}",
+                label: "R\$${userData.userDataSallary?.round()}",
                 onChanged: (double value) {
                   setState(() {
-                    chosenSalary = value;
+                    userData.userDataSallary = value;
                   });
                 },
               ),
               TextButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await appStorageService
-                        .setRegisterName(nameController.text);
-                    await appStorageService
-                        .setEmail(emailController.toString());
-                    await appStorageService.setRegisterBirthDate(birthDate!);
-                    await appStorageService
-                        .setRegisterExperienceTime(selectedLevel);
-                    await appStorageService
-                        .setRegisterSelectedLanguage(selectedLanguage);
-                    await appStorageService
-                        .setRegisterExperienceTime(experienceTime);
-                    await appStorageService
-                        .setRegisterChosenSalary(chosenSalary);
-
-                    debugPrint("Nome: ${nameController.text};\n"
-                        "E-mail: ${emailController.text};\n"
-                        "Data de nascimento: ${birthDate?.day}/${birthDate?.month}/${birthDate?.year};\n"
-                        "Nível de experiência: ${selectedLevel.toString()};\n"
-                        "Linguagens preferidas: ${selectedLanguage.toString()};\n"
-                        "Tempo de experiência: ${experienceTime.toString()};\n"
-                        "Pretenção salarial: R\$${chosenSalary.round().toString()};\n");
+                    userData.userDataUsername = nameController.text;
+                    userData.userDataEmail = emailController.text;
+                    userDataRepository.save(userData);
 
                     Navigator.pushReplacement(
                         context,
