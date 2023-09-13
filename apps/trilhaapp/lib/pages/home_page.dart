@@ -4,6 +4,7 @@ import 'package:trilhaapp/pages/image_assets.dart';
 import 'package:trilhaapp/pages/list_view.dart';
 import 'package:trilhaapp/pages/list_view_horizontal_page.dart';
 import 'package:trilhaapp/pages/task_page/task_hive_page.dart';
+import 'package:trilhaapp/pages/task_page/task_sqflite_page.dart';
 import 'package:trilhaapp/shared/widgets/custom_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                   CardPage(),
                   ImageAssetsPage(),
                   ListViewPage(),
-                  TaskHivePage(),
+                  TaskSQFLitePage(),
                   ListViewH(),
                 ],
               ),
