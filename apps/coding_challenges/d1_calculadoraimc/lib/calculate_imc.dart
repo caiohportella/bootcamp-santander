@@ -1,30 +1,30 @@
-import 'package:d1_calculadoraimc/models/person.dart';
+import 'package:d1_calculadoraimc/model/person_model.dart';
 
 class IMCCalculator {
-  Person person = Person();
+  PersonModel person = PersonModel();
 
   double calculate(double height, double weight) {
     double heightInMeters = height / 100.0;
     return weight / (heightInMeters * heightInMeters);
   }
 
-  Person returnIMCPerson(double height, double weight) {
-    person.height = height;
-    person.weight = weight;
-    person.bmi = calculate(height, weight);
-    person.bmi = double.parse(person.bmi.toStringAsFixed(2));
+  PersonModel returnIMCPerson(double height, double weight) {
+    person.personHeight = height;
+    person.personWeight = weight;
+    person.personBMI = calculate(height, weight);
+    person.personBMI = double.parse(person.personBMI.toStringAsFixed(2));
     return person;
   }
 
   bool hasGoodBMI(double bmi) {
     if (bmi < 18.5 || bmi >= 40) {
-      person.hasGoodBMI = false;
+      person.personHasGoodBMI = false;
     } else if ((bmi >= 18.5 && bmi < 25) || (bmi >= 30 && bmi < 35)) {
-      person.hasGoodBMI = true;
+      person.personHasGoodBMI = true;
     } else {
-      person.hasGoodBMI = false;
+      person.personHasGoodBMI = false;
     }
 
-    return person.hasGoodBMI;
+    return person.personHasGoodBMI;
   }
 }

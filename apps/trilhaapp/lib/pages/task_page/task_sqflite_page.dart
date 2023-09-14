@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trilhaapp/model/task_model.dart';
 import 'package:trilhaapp/model/task_model_sqflite.dart';
 import 'package:trilhaapp/service/repositories/sqflite/task_sqflite_repository.dart';
-import 'package:trilhaapp/service/repositories/task_hive_repository.dart';
 import 'package:trilhaapp/service/repositories/task_repository.dart';
 
 class TaskSQFLitePage extends StatefulWidget {

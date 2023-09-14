@@ -1,11 +1,19 @@
-import 'package:d1_calculadoraimc/models/person.dart';
-import 'package:d1_calculadoraimc/person_CRUD.dart';
+import 'package:d1_calculadoraimc/model/person_model.dart';
+import 'package:d1_calculadoraimc/service/repositories/person_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'calculate_IMC.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  var documentsDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
+
+  Hive.init(documentsDirectory.path);
+  Hive.registerAdapter(PersonModelAdapter());
+
   runApp(MaterialApp(
     title: 'Calculadora IMC',
     theme: ThemeData(
@@ -29,16 +37,17 @@ class _CalculateIMC extends StatefulWidget {
 }
 
 class _CalculateIMCState extends State<_CalculateIMC> {
+  late PersonRepository personRepository;
+
+  var peopleModel = <PersonModel>[];
+  var hasGoodBMI = false;
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
 
-  var crud = PersonCRUD();
-  var people = <Person>[];
-
-  IMCCalculator imcCalculator = IMCCalculator();
-  Person person = Person();
+  // IMCCalculator imcCalculator = IMCCalculator();
 
   bool isValidPerson(
       TextEditingController nameController,
@@ -56,13 +65,15 @@ class _CalculateIMCState extends State<_CalculateIMC> {
     }
   }
 
-  void getPeople() async {
-    people = await crud.listPersons();
+  void getPerson() async {
+    personRepository = await PersonRepository.load();
+    peopleModel = personRepository.getData(hasGoodBMI);
+
     setState(() {});
   }
 
   Widget _getChild() {
-    if (people.isEmpty) {
+    if (peopleModel.isEmpty) {
       return const Center(
         child: Text(
           "Nenhuma pessoa cadastrada",
@@ -71,29 +82,32 @@ class _CalculateIMCState extends State<_CalculateIMC> {
       );
     } else {
       return ListView.builder(
-          itemCount: people.length,
+          itemCount: peopleModel.length,
           itemBuilder: (context, index) {
             return Dismissible(
-              key: Key(people[index].id.toString()),
+              key: Key(peopleModel[index].personID.toString()),
               onDismissed: (DismissDirection direction) async {
-                await crud.removePerson(people[index]);
-                getPeople();
+                await personRepository.delete(peopleModel[index]);
+                getPerson();
               },
               child: ListTile(
                 isThreeLine: true,
                 title: Text(
-                  people[index].name.trim(),
+                  peopleModel[index].personName.toString().trim(),
                   style: const TextStyle(fontSize: 24),
                 ),
                 subtitle: Text(
-                  "IMC: ${people[index].bmi}",
+                  "IMC: ${peopleModel[index].personBMI.toStringAsFixed(2)}",
                   style: const TextStyle(fontSize: 16),
                 ),
                 trailing: Icon(
-                  IMCCalculator().hasGoodBMI(people[index].bmi) == true
+                  IMCCalculator().hasGoodBMI(peopleModel[index].personBMI) ==
+                          true
                       ? Icons.sentiment_very_satisfied_rounded
                       : Icons.sentiment_very_dissatisfied_rounded,
-                  color: IMCCalculator().hasGoodBMI(people[index].bmi) == true
+                  color: IMCCalculator()
+                              .hasGoodBMI(peopleModel[index].personBMI) ==
+                          true
                       ? Colors.green
                       : Colors.red,
                 ),
@@ -105,7 +119,7 @@ class _CalculateIMCState extends State<_CalculateIMC> {
 
   @override
   void initState() {
-    getPeople();
+    getPerson();
     super.initState();
   }
 
@@ -187,18 +201,47 @@ class _CalculateIMCState extends State<_CalculateIMC> {
                                   _weightController) ==
                               true) &&
                           _formKey.currentState!.validate()) {
-                        await crud.addPerson(Person(
-                            personName: _nameController.text,
-                            personHeight: double.parse(_heightController.text),
-                            personWeight: double.parse(_weightController.text),
-                            personBMI: imcCalculator
-                                .returnIMCPerson(
-                                    double.parse(_heightController.text),
-                                    double.parse(_weightController.text))
-                                .bmi
-                                .toDouble()));
+                        await personRepository.save(PersonModel.create(
+                          _nameController.text,
+                          double.parse(_heightController.text),
+                          double.parse(_weightController.text),
+                          IMCCalculator()
+                              .returnIMCPerson(
+                                  double.parse(_heightController.text),
+                                  double.parse(_weightController.text))
+                              .personBMI
+                              .toDouble(),
+                        ));
+                        // personRepository.insertData(PersonModel(
+                        //     personID: 0,
+                        //     personName: _nameController.text,
+                        //     personHeight: double.parse(_heightController.text),
+                        //     personWeight: double.parse(_weightController.text),
+                        //     personBMI: imcCalculator
+                        //         .returnIMCPerson(
+                        //             double.parse(_heightController.text),
+                        //             double.parse(_weightController.text))
+                        //         .bmi
+                        //         .toDouble(),
+                        //     personHasGoodBMI: imcCalculator.hasGoodBMI(
+                        //         imcCalculator
+                        //             .returnIMCPerson(
+                        //                 double.parse(_heightController.text),
+                        //                 double.parse(_weightController.text))
+                        //             .bmi
+                        //             .toDouble())));
+                        // await crud.addPerson(Person(
+                        //     personName: _nameController.text,
+                        //     personHeight: double.parse(_heightController.text),
+                        //     personWeight: double.parse(_weightController.text),
+                        //     personBMI: imcCalculator
+                        //         .returnIMCPerson(
+                        //             double.parse(_heightController.text),
+                        //             double.parse(_weightController.text))
+                        //         .bmi
+                        //         .toDouble()));
                         setState(() {
-                          getPeople();
+                          getPerson();
                         });
                         Navigator.of(context).pop();
                       } else {
@@ -210,7 +253,7 @@ class _CalculateIMCState extends State<_CalculateIMC> {
                         );
                       }
                       setState(() {
-                        getPeople();
+                        getPerson();
                       });
                     },
                     child: const Icon(Icons.send_rounded),
