@@ -3,6 +3,7 @@ import 'package:trilhaapp/pages/card_page.dart';
 import 'package:trilhaapp/pages/image_assets.dart';
 import 'package:trilhaapp/pages/list_view.dart';
 import 'package:trilhaapp/pages/list_view_horizontal_page.dart';
+import 'package:trilhaapp/pages/search_zip_code.dart';
 import 'package:trilhaapp/pages/task_page/task_sqflite_page.dart';
 import 'package:trilhaapp/shared/widgets/custom_drawer.dart';
 
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
                   ListViewPage(),
                   TaskSQFLitePage(),
                   ListViewH(),
+                  SearchZipCodePage(),
                 ],
               ),
             ),
@@ -67,7 +69,10 @@ class _HomePageState extends State<HomePage> {
                   BottomNavigationBarItem(
                     icon: Icon(Icons.settings),
                     label: "Settings",
-                  ),  
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.upload_rounded),
+                    label: "HTTP"),  
                 ])
           ],
         ),

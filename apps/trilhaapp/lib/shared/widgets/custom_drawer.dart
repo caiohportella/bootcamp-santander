@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trilhaapp/pages/login_page.dart';
+import 'package:trilhaapp/pages/posts_page.dart';
 import 'package:trilhaapp/pages/random_number/random_number_hive_page.dart';
 import 'package:trilhaapp/pages/register_data/register_page_hive.dart';
 import 'package:trilhaapp/pages/settings/settings_hive_page.dart';
@@ -98,6 +99,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   MaterialPageRoute(
                     builder: (context) => const SettingsHivePage(),
                   ));
+            },
+          ),
+          ListTile(
+            title: const Row(
+              children: [
+                Icon(Icons.post_add_rounded),
+                SizedBox(width: 10),
+                Text("Posts"),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PostsPage(),
+                ));
             },
           ),
           ListTile(
