@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trilhaapp/model/comment_model.dart';
-import 'package:trilhaapp/service/repositories/http/comments_repository.dart';
+import 'package:trilhaapp/service/repositories/comments/comments_repository.dart';
+import 'package:trilhaapp/service/repositories/comments/impl/comments_dio_repository.dart';
+// import 'package:trilhaapp/service/repositories/comments/impl/commentshttp_repository.dart';
 
 class CommentsPage extends StatefulWidget {
   final int postID;
@@ -11,16 +13,17 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> {
-  var commentsRepository = CommentsHTTPRepository();
+  late CommentRepository commentsRepository;
   var comments = <CommentModel>[];
 
   loadData() async {
-    comments = await commentsRepository.getComments(widget.postID);
+    comments = await commentsRepository.getCommentsByPostId(widget.postID);
     setState(() {});
   }
 
   @override
   initState() {
+    commentsRepository = CommentsDioRepository();
     loadData();
     super.initState();
   }
@@ -40,7 +43,8 @@ class _CommentsPageState extends State<CommentsPage> {
                     var comment = comments[index];
                     return Card(
                         child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

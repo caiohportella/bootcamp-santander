@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trilhaapp/model/viacep_model.dart';
-import 'package:trilhaapp/service/repositories/http/viacep_repository.dart';
+import 'package:trilhaapp/service/repositories/viacephttp_repository.dart';
 
 class SearchZipCodePage extends StatefulWidget {
   const SearchZipCodePage({Key? key}) : super(key: key);
@@ -39,7 +39,10 @@ class _SearchZipCodePageState extends State<SearchZipCodePage> {
                     setState(() {
                       loading = true;
                     });
-                    viacep = await viaCEPRepository.fetchCEP(zip);                   
+                    viacep = await viaCEPRepository.fetchCEP(zip);
+                    setState(() {
+                      loading = false;
+                    });                   
                   }
                 },
               ),
