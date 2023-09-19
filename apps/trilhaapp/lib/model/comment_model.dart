@@ -8,19 +8,19 @@ class CommentModel {
   CommentModel(
       {int? postId, int? id, String? name, String? email, String? body}) {
     if (postId != null) {
-      this._postId = postId;
+      _postId = postId;
     }
     if (id != null) {
-      this._id = id;
+      _id = id;
     }
     if (name != null) {
-      this._name = name;
+      _name = name;
     }
     if (email != null) {
-      this._email = email;
+      _email = email;
     }
     if (body != null) {
-      this._body = body;
+      _body = body;
     }
   }
 
@@ -44,12 +44,12 @@ class CommentModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['postId'] = this._postId;
-    data['id'] = this._id;
-    data['name'] = this._name;
-    data['email'] = this._email;
-    data['body'] = this._body;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['postId'] = _postId;
+    data['id'] = _id;
+    data['name'] = _name;
+    data['email'] = _email;
+    data['body'] = _body;
     return data;
   }
 }

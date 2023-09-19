@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:trilhaapp/pages/heroes/heroes_page.dart';
 import 'package:trilhaapp/pages/login_page.dart';
 import 'package:trilhaapp/pages/posts_page.dart';
 import 'package:trilhaapp/pages/random_number/random_number_hive_page.dart';
 import 'package:trilhaapp/pages/register_data/register_page_hive.dart';
 import 'package:trilhaapp/pages/settings/settings_hive_page.dart';
 import 'package:trilhaapp/service/image_picker_service.dart';
+import 'package:trilhaapp/service/repositories/marvel/marvel_repository.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -111,10 +113,29 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PostsPage(),
-                ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PostsPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            title: const Row(
+              children: [
+                Icon(Icons.api_rounded),
+                SizedBox(width: 10),
+                Text("Heroes"),
+              ],
+            ),
+            onTap: () async {
+              var marvelRepository = MarvelRepository();
+              await marvelRepository.fetchCharacters(0);
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HeroesPage(),
+                  ));
             },
           ),
           ListTile(
