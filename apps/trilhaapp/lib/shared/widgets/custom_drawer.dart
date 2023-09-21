@@ -5,6 +5,7 @@ import 'package:trilhaapp/pages/posts_page.dart';
 import 'package:trilhaapp/pages/random_number/random_number_hive_page.dart';
 import 'package:trilhaapp/pages/register_data/register_page_hive.dart';
 import 'package:trilhaapp/pages/settings/settings_hive_page.dart';
+import 'package:trilhaapp/pages/task_page/task_http_page.dart';
 import 'package:trilhaapp/service/image_picker_service.dart';
 import 'package:trilhaapp/service/repositories/marvel/marvel_repository.dart';
 
@@ -135,6 +136,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const HeroesPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            title: const Row(
+              children: [
+                Icon(Icons.sports_football),
+                SizedBox(width: 10),
+                Text("Tasks HTTP"),
+              ],
+            ),
+            onTap: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TaskHTTPPage(),
                   ));
             },
           ),

@@ -10,7 +10,7 @@ class HeroesPage extends StatefulWidget {
 }
 
 class _HeroesPageState extends State<HeroesPage> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   late MarvelRepository marvelRepository;
   CharactersModel characters = CharactersModel();
   int offset = 0;
